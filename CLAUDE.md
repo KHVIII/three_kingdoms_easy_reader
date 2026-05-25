@@ -2,6 +2,10 @@
 
 A static, frontend-only reading app for 三国演义 (Romance of the Three Kingdoms). Designed for modern Chinese readers who want to engage with the classical text — click any character to see its pinyin pronunciation. The UI supports bilingual display (Chinese/English), toggleable by the user.
 
+## Important: Next.js Version
+
+This project uses Next.js 16, which has breaking changes from earlier versions. Before writing any Next.js-specific code, read the relevant guide in `node_modules/next/dist/docs/`. APIs, conventions, and file structure may differ from training data.
+
 ## Stack
 
 - **Framework**: Next.js with `output: 'export'` (fully static, no server)
@@ -48,6 +52,10 @@ npm run process-text  # Standalone: re-run pinyin pre-processor on /content
 - **PWA-ready** — the app should work offline once loaded. Keep this in mind when fetching content: prefer bundled data over runtime fetches.
 - **No comments explaining what code does** — only add a comment when the *why* is non-obvious (a constraint, a workaround, a subtle invariant).
 
+## Hosting & Deployment
+
+Deployed to GitHub Pages via static export. The `/out` directory is the deployable artifact. The site must work when opened as a local file (`file://`) to support offline use on mobile.
+
 ## Stretch Goals (not in scope — do not implement unless explicitly instructed)
 
 ### Long-press sentence translation
@@ -59,7 +67,3 @@ When the time comes, the approach is:
 - Results are stored in the content JSON alongside the pinyin data — click handlers do a lookup, no network call.
 - For English specifically, the Brewitt-Taylor translation (1925, public domain, on Project Gutenberg) is worth investigating as an alternative to LLM output, but sentence-level alignment with the original is non-trivial.
 - Estimated one-time cost for the full novel (~800k characters, both languages): $10–30.
-
-## Hosting & Deployment
-
-Deployed to GitHub Pages via static export. The `/out` directory is the deployable artifact. The site must work when opened as a local file (`file://`) to support offline use on mobile.

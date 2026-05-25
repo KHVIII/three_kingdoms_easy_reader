@@ -1,0 +1,29 @@
+{
+  "id": "chapter-001",
+  "number": 1,
+  "title": "宴桃园豪杰三结义 斩黄巾英雄首立功",
+  "sentences": [
+    {
+      "id": "s001",
+      "characters": [
+        { "char": "话", "pinyin": "huà" },
+        { "char": "说", "pinyin": "shuō" },
+        { "char": "天", "pinyin": "tiān" },
+        { "char": "下", "pinyin": "xià" },
+        { "char": "大", "pinyin": "dà" },
+        { "char": "势", "pinyin": "shì" },
+        { "char": "，", "pinyin": null },
+        { "char": "分", "pinyin": "fēn" },
+        { "char": "久", "pinyin": "jiǔ" },
+        { "char": "必", "pinyin": "bì" },
+        { "char": "合", "pinyin": "hé" },
+        { "char": "，", "pinyin": null },
+        { "char": "合", "pinyin": "hé" },
+        { "char": "久", "pinyin": "jiǔ" },
+        { "char": "必", "pinyin": "bì" },
+        { "char": "分", "pinyin": "fēn" },
+        { "char": "。", "pinyin": null }
+      ]
+    }
+  ]
+}

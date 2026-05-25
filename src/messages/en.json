@@ -1,0 +1,16 @@
+{
+  "nav": {
+    "tableOfContents": "Contents",
+    "previousChapter": "Previous Chapter",
+    "nextChapter": "Next Chapter"
+  },
+  "reader": {
+    "tapHint": "Tap a character to see its pronunciation",
+    "close": "Close"
+  },
+  "home": {
+    "title": "Romance of the Three Kingdoms",
+    "subtitle": "Easy Reader",
+    "startReading": "Start Reading"
+  }
+}
