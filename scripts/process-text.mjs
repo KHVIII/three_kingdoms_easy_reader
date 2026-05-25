@@ -15,11 +15,21 @@ function sentenceSplit(text) {
 
 function annotateCharacters(sentence) {
   const chars = [...sentence]; // spread handles multi-byte CJK correctly
-  return chars.map((char) => {
-    if (PUNCT.has(char)) return { char, pinyin: null };
-    const py = pinyin(char, { toneType: "symbol", type: "string" });
-    return { char, pinyin: py || null };
-  });
+
+  // Pass all hanzi together so pinyin-pro can resolve polyphones using context.
+  // Punctuation is excluded because it doesn't aid disambiguation and can
+  // confuse the library's word-segmentation step.
+  const hanziOnly = chars.filter((c) => !PUNCT.has(c)).join("");
+  const pinyinArr =
+    hanziOnly.length > 0
+      ? pinyin(hanziOnly, { toneType: "symbol", type: "array" })
+      : [];
+
+  let pi = 0;
+  return chars.map((char) => ({
+    char,
+    pinyin: PUNCT.has(char) ? null : (pinyinArr[pi++] ?? null),
+  }));
 }
 
 function processChapter(rawPath, chapterNumber, title) {

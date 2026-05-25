@@ -1,26 +1,257 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --parchment:   #f5efd6;
+  --parchment-2: #ede5c4;
+  --ink:         #1a1208;
+  --vermillion:  #8b1a1a;
+  --pinyin-col:  #9b3a2a;
+  --border:      #c8b88a;
+  --muted:       #7a6a4a;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-parchment:  var(--parchment);
+  --color-ink:        var(--ink);
+  --color-vermillion: var(--vermillion);
+  --color-border:     var(--border);
+  --color-muted:      var(--muted);
+  --font-display:     var(--font-cormorant);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--parchment);
+  color: var(--ink);
+  min-height: 100dvh;
+  /* subtle paper grain */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+}
+
+/* ── Chinese text ─────────────────────────────────── */
+.chinese {
+  font-family: 'STSong', 'SimSun', 'Songti SC', 'Source Han Serif CN', serif;
+}
+
+/* ── Reading area ─────────────────────────────────── */
+.reading-area {
+  line-height: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  align-items: flex-end;
+}
+
+/* ── Ruby / pinyin above characters ──────────────── */
+.char-ruby {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 0 0.05em;
+  transition: color 0.15s;
+}
+.char-ruby:hover { color: var(--vermillion); }
+.char-ruby.is-punct {
+  cursor: default;
+  padding: 0;
+}
+.char-ruby.is-punct:hover { color: inherit; }
+
+.char-pinyin {
+  font-family: var(--font-cormorant), serif;
+  font-style: italic;
+  font-size: 0.42em;
+  color: var(--pinyin-col);
+  line-height: 1.3;
+  height: 1.3em;
+  display: flex;
+  align-items: flex-end;
+  white-space: nowrap;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.char-pinyin.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.char-pinyin.invisible {
+  visibility: hidden; /* reserve space but hide — used by toggle mode */
+}
+
+.char-glyph {
+  font-size: 1em;
+  line-height: 1.15;
+}
+
+/* ── Demo nav ────────────────────────────────────── */
+.demo-nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--parchment) 92%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.demo-nav__modes {
+  display: flex;
+  gap: 0;
+}
+
+.demo-nav__tab {
+  font-family: var(--font-cormorant), serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  padding: 0.3rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  transition: all 0.15s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.demo-nav__tab:hover { color: var(--ink); }
+.demo-nav__tab--active {
+  color: var(--vermillion);
+  border-color: var(--border);
+  background: var(--parchment-2);
+}
+
+.demo-nav__lang {
+  font-family: var(--font-cormorant), serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.demo-nav__lang:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+/* ── Chapter header ───────────────────────────────── */
+.chapter-header {
+  text-align: center;
+  padding: 3rem 0 2rem;
+}
+.chapter-number {
+  font-family: var(--font-cormorant), serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.chapter-title {
+  font-family: 'STSong', 'SimSun', 'Songti SC', serif;
+  font-size: 1.1rem;
+  color: var(--ink);
+  margin-top: 0.6rem;
+  line-height: 1.8;
+}
+
+/* ── Toggle button ────────────────────────────────── */
+.pinyin-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-cormorant), serif;
+  font-size: 0.9rem;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 0.3rem 0.8rem;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.pinyin-toggle:hover { color: var(--ink); border-color: var(--ink); }
+.pinyin-toggle.active { color: var(--vermillion); border-color: var(--vermillion); }
+
+/* ── Popup overlay ────────────────────────────────── */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 18, 8, 0.45);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.15s ease;
+}
+.popup-card {
+  background: var(--parchment);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2.5rem 3rem 2rem;
+  text-align: center;
+  max-width: 320px;
+  width: 90%;
+  box-shadow: 0 8px 40px rgba(26,18,8,0.25);
+  animation: slideUp 0.2s ease;
+  position: relative;
+}
+.popup-char {
+  font-family: 'STSong', 'SimSun', 'Songti SC', serif;
+  font-size: 5rem;
+  line-height: 1;
+  color: var(--ink);
+}
+.popup-pinyin {
+  font-family: var(--font-cormorant), serif;
+  font-style: italic;
+  font-size: 1.6rem;
+  color: var(--vermillion);
+  margin-top: 0.4rem;
+  letter-spacing: 0.05em;
+}
+.popup-divider {
+  width: 2rem;
+  height: 1px;
+  background: var(--border);
+  margin: 1rem auto;
+}
+.popup-definition {
+  font-family: var(--font-cormorant), serif;
+  font-size: 0.95rem;
+  color: var(--muted);
+  font-style: italic;
+  line-height: 1.6;
+}
+.popup-close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.8rem;
+  font-size: 1.2rem;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0.2rem;
+}
+.popup-close:hover { color: var(--ink); }
+
+@keyframes fadeIn  { from { opacity: 0 } to { opacity: 1 } }
+@keyframes slideUp { from { transform: translateY(12px); opacity: 0 } to { transform: none; opacity: 1 } }
+
+/* ── Hint text ────────────────────────────────────── */
+.reader-hint {
+  font-family: var(--font-cormorant), serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 1.5rem;
 }
