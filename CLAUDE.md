@@ -48,6 +48,18 @@ npm run process-text  # Standalone: re-run pinyin pre-processor on /content
 - **PWA-ready** — the app should work offline once loaded. Keep this in mind when fetching content: prefer bundled data over runtime fetches.
 - **No comments explaining what code does** — only add a comment when the *why* is non-obvious (a constraint, a workaround, a subtle invariant).
 
+## Stretch Goals (not in scope — do not implement unless explicitly instructed)
+
+### Long-press sentence translation
+Long-pressing a sentence would show a translation popup in modern Mandarin (白话文) and/or English. **This is not being built yet.**
+
+When the time comes, the approach is:
+- **Do not call a translation API at runtime** — that breaks the static/offline constraint.
+- Translations are pre-generated once at build time using the Claude Batch API (50% cheaper than standard), with a prompt that translates each classical Chinese sentence into modern Mandarin and English with surrounding context.
+- Results are stored in the content JSON alongside the pinyin data — click handlers do a lookup, no network call.
+- For English specifically, the Brewitt-Taylor translation (1925, public domain, on Project Gutenberg) is worth investigating as an alternative to LLM output, but sentence-level alignment with the original is non-trivial.
+- Estimated one-time cost for the full novel (~800k characters, both languages): $10–30.
+
 ## Hosting & Deployment
 
 Deployed to GitHub Pages via static export. The `/out` directory is the deployable artifact. The site must work when opened as a local file (`file://`) to support offline use on mobile.
