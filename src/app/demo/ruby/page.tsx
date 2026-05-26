@@ -1,14 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { I18nProvider, useI18n } from "@/lib/i18n";
 import DemoNav from "@/components/DemoNav";
 import { getChapter001 } from "@/lib/content";
 
 const chapter = getChapter001();
 
-function RubyReader() {
-  const { t } = useI18n();
+export default function RubyPage() {
   const [showPinyin, setShowPinyin] = useState(true);
 
   return (
@@ -25,10 +23,7 @@ function RubyReader() {
             className={`pinyin-toggle ${showPinyin ? "active" : ""}`}
             onClick={() => setShowPinyin((v) => !v)}
           >
-            <span style={{ fontSize: "0.7em", letterSpacing: "0.1em" }}>
-              {showPinyin ? "▲" : "▽"}
-            </span>
-            {showPinyin ? t.reader.tapHint.slice(0, 2) + "拼音" : "显示拼音"}
+            {showPinyin ? "隐藏拼音" : "显示拼音"}
           </button>
         </div>
 
@@ -40,7 +35,8 @@ function RubyReader() {
                 className={`char-ruby ${!c.pinyin ? "is-punct" : ""}`}
               >
                 <span
-                  className={`char-pinyin ${!showPinyin ? "invisible" : ""} ${!c.pinyin ? "invisible" : ""}`}
+                  className="char-pinyin"
+                  style={{ visibility: showPinyin && !!c.pinyin ? "visible" : "hidden" }}
                 >
                   {c.pinyin ?? ""}
                 </span>
@@ -51,13 +47,5 @@ function RubyReader() {
         </div>
       </div>
     </>
-  );
-}
-
-export default function RubyPage() {
-  return (
-    <I18nProvider>
-      <RubyReader />
-    </I18nProvider>
   );
 }

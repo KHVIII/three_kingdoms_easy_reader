@@ -9,10 +9,10 @@ export default function Home() {
           className="chinese"
           style={{ fontSize: "3rem", lineHeight: 1.3, color: "var(--ink)" }}
         >
-          三國演義
+          三国演义
         </h1>
         <p className="chapter-number mt-1" style={{ color: "var(--vermillion)" }}>
-          輕鬆閱讀版
+          轻松阅读版
         </p>
 
         <div
@@ -39,7 +39,7 @@ export default function Home() {
             transition: "opacity 0.15s",
           }}
         >
-          開始閱讀
+          开始阅读
         </Link>
       </div>
     </main>

@@ -1,14 +1,12 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { I18nProvider, useI18n } from "@/lib/i18n";
 import DemoNav from "@/components/DemoNav";
 import { getChapter001 } from "@/lib/content";
 
 const chapter = getChapter001();
 
-function RevealReader() {
-  const { t } = useI18n();
+export default function RevealPage() {
   const [revealed, setRevealed] = useState<Set<string>>(new Set());
 
   const toggle = useCallback((key: string) => {
@@ -28,7 +26,7 @@ function RevealReader() {
           <p className="chapter-title">{chapter.title}</p>
         </div>
 
-        <p className="reader-hint">{t.reader.tapHint}</p>
+        <p className="reader-hint">点击字符查看拼音</p>
 
         <div className="reading-area chinese" style={{ fontSize: "2rem", justifyContent: "center" }}>
           {chapter.sentences.map((sentence) =>
@@ -70,13 +68,5 @@ function RevealReader() {
         </div>
       </div>
     </>
-  );
-}
-
-export default function RevealPage() {
-  return (
-    <I18nProvider>
-      <RevealReader />
-    </I18nProvider>
   );
 }

@@ -161,6 +161,17 @@ body {
   line-height: 1.8;
 }
 
+/* ── Back link ────────────────────────────────────── */
+.nav-back {
+  font-family: var(--font-cormorant), serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.nav-back:hover { color: var(--ink); }
+
 /* ── Toggle button ────────────────────────────────── */
 .pinyin-toggle {
   display: inline-flex;
@@ -222,12 +233,33 @@ body {
   background: var(--border);
   margin: 1rem auto;
 }
+.popup-definitions {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-align: left;
+}
 .popup-definition {
   font-family: var(--font-cormorant), serif;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   color: var(--muted);
-  font-style: italic;
-  line-height: 1.6;
+  line-height: 1.5;
+  padding-left: 1.2em;
+  position: relative;
+}
+.popup-definition::before {
+  content: counter(list-item) ".";
+  counter-increment: list-item;
+  position: absolute;
+  left: 0;
+  color: var(--border);
+  font-size: 0.8em;
+}
+ol.popup-definitions {
+  counter-reset: list-item;
 }
 .popup-close {
   position: absolute;

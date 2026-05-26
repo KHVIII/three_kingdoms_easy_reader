@@ -10,7 +10,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "三国演义 · 轻松阅读",
+  title: "三国演义 · 轻松阅读版",
   description: "Romance of the Three Kingdoms — Easy Reader with pinyin",
 };
 

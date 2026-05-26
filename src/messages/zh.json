@@ -2,14 +2,19 @@
   "nav": {
     "tableOfContents": "目录",
     "previousChapter": "上一章",
-    "nextChapter": "下一章"
+    "nextChapter": "下一章",
+    "back": "目录"
   },
   "reader": {
-    "tapHint": "点击字符查看拼音",
-    "close": "关闭"
+    "chapter": "第",
+    "chapterUnit": "回",
+    "showPinyin": "显示拼音",
+    "hidePinyin": "隐藏拼音",
+    "tapHint": "点击字符查看释义",
+    "close": "关闭",
+    "noDefinition": "暂无释义"
   },
   "home": {
-    "title": "三国演义",
     "subtitle": "轻松阅读版",
     "startReading": "开始阅读"
   }

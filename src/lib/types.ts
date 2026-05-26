@@ -1,6 +1,7 @@
 export interface Character {
   char: string;
   pinyin: string | null;
+  definitions?: string[] | null;
 }
 
 export interface Sentence {

@@ -33,6 +33,9 @@
 # Claude Code
 .claude/settings.local.json
 
+# Dictionary data (download via: curl -sL https://raw.githubusercontent.com/pwxcoo/chinese-xinhua/master/data/word.json -o scripts/dict/word.json)
+scripts/dict/word.json
+
 # debug
 npm-debug.log*
 yarn-debug.log*
