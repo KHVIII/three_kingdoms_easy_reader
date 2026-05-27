@@ -2,9 +2,9 @@
 
 import { useState, useCallback } from "react";
 import DemoNav from "@/components/DemoNav";
-import { getChapter001 } from "@/lib/content";
+import { getChapter } from "@/lib/content";
 
-const chapter = getChapter001();
+const chapter = getChapter(1)!;
 
 export default function RevealPage() {
   const [revealed, setRevealed] = useState<Set<string>>(new Set());

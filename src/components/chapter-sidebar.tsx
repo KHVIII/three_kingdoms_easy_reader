@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-
-const ZH_NUM = ["", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"];
+import { toZhNum } from "@/lib/zh-num";
 
 export interface ChapterMeta { number: number; title: string; }
 
@@ -42,7 +41,7 @@ export default function ChapterSidebar({ chapterList, currentNum, open, onToggle
                 className={`reader-sidebar__item${meta.number === currentNum ? " reader-sidebar__item--active" : ""}`}
               >
                 <Link href={`/reader/${meta.number}`}>
-                  <span className="reader-sidebar__num">第{ZH_NUM[meta.number]}回</span>
+                  <span className="reader-sidebar__num">第{toZhNum(meta.number)}回</span>
                   <span className="reader-sidebar__name">{shortTitle(meta.title)}</span>
                 </Link>
               </li>

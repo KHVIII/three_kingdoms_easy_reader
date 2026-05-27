@@ -3,7 +3,7 @@ import { getChapter, CHAPTER_METADATA } from "@/lib/content";
 import ReaderClient from "./reader-client";
 
 export function generateStaticParams() {
-  return Array.from({ length: 10 }, (_, i) => ({ chapter: String(i + 1) }));
+  return CHAPTER_METADATA.map((ch) => ({ chapter: String(ch.number) }));
 }
 
 export default async function ReaderPage({

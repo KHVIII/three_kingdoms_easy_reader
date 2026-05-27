@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { CHAPTER_METADATA } from "@/lib/content";
-
-const ZH_NUM = ["", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"];
+import { toZhNum } from "@/lib/zh-num";
 
 export default function Home() {
   return (
@@ -43,7 +42,7 @@ export default function Home() {
       <div className="chapter-grid">
         {CHAPTER_METADATA.map((meta) => (
           <Link key={meta.number} href={`/reader/${meta.number}`} className="chapter-card">
-            <span className="chapter-card__num">第{ZH_NUM[meta.number]}回</span>
+            <span className="chapter-card__num">第{toZhNum(meta.number)}回</span>
             <span className="chapter-card__title chinese">{meta.title}</span>
           </Link>
         ))}

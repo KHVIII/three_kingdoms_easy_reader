@@ -5,8 +5,7 @@ import Link from "next/link";
 import type { Chapter } from "@/lib/types";
 import ChapterSidebar from "@/components/chapter-sidebar";
 import type { ChapterMeta } from "@/components/chapter-sidebar";
-
-const ZH_NUM = ["", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"];
+import { toZhNum } from "@/lib/zh-num";
 
 interface Props {
   chapter: Chapter;
@@ -85,7 +84,7 @@ export default function ReaderClient({ chapter, currentNum, chapterList }: Props
               href={`/reader/${meta.number}`}
               className={`chapter-strip__item${meta.number === currentNum ? " chapter-strip__item--active" : ""}`}
             >
-              第{ZH_NUM[meta.number]}回
+              第{toZhNum(meta.number)}回
             </Link>
           ))}
         </nav>
@@ -93,7 +92,7 @@ export default function ReaderClient({ chapter, currentNum, chapterList }: Props
         {/* Chapter header */}
         <div style={{ maxWidth: "80%", margin: "0 auto", padding: "0 1.5rem 6rem" }}>
           <div className="chapter-header">
-            <p className="chapter-number">第{ZH_NUM[currentNum]}回</p>
+            <p className="chapter-number">第{toZhNum(currentNum)}回</p>
             <p className="chapter-title">{chapter.title}</p>
           </div>
 
