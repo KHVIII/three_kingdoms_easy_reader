@@ -86,6 +86,22 @@ body {
   line-height: 1.15;
 }
 
+/* When a hanzi has trailing punctuation, switch to row so the pinyin
+   stays centered over just the hanzi rather than hanzi+punctuation. */
+.char-ruby--row {
+  flex-direction: row;
+  align-items: flex-end;
+}
+.char-cell {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+.char-punct {
+  font-size: 1em;
+  line-height: 1.15;
+}
+
 /* ── Demo nav ────────────────────────────────────── */
 .demo-nav {
   position: sticky;
@@ -286,4 +302,242 @@ ol.popup-definitions {
   color: var(--muted);
   text-align: center;
   margin-bottom: 1.5rem;
+}
+
+/* ── Reader layout (sidebar + main) ──────────────── */
+.reader-layout {
+  display: flex;
+  align-items: flex-start;
+  min-height: 100dvh;
+}
+
+/* ── Sidebar ──────────────────────────────────────── */
+.reader-sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-right: 1px solid var(--border);
+  scrollbar-width: none;
+  transition: width 0.22s ease;
+}
+.reader-sidebar::-webkit-scrollbar { display: none; }
+
+.reader-sidebar--collapsed {
+  width: 40px;
+}
+
+.reader-sidebar__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1.4rem 1.25rem 1.2rem;
+}
+
+.reader-sidebar--collapsed .reader-sidebar__header {
+  justify-content: center;
+  padding: 1.4rem 0 1.2rem;
+}
+
+.reader-sidebar__home {
+  font-family: var(--font-cormorant), serif;
+  font-style: italic;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s;
+  white-space: nowrap;
+}
+.reader-sidebar__home:hover { color: var(--ink); }
+
+.reader-sidebar__toggle {
+  font-family: var(--font-cormorant), serif;
+  font-size: 1.3rem;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+.reader-sidebar__toggle:hover { color: var(--ink); }
+
+.reader-sidebar__brand {
+  font-family: 'STSong', 'SimSun', 'Songti SC', serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.15em;
+  color: var(--ink);
+  display: block;
+}
+
+.reader-sidebar__sub {
+  font-family: var(--font-cormorant), serif;
+  font-style: italic;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  display: block;
+  margin-top: 0.2rem;
+}
+
+.reader-sidebar__list {
+  list-style: none;
+  padding: 0.5rem 0;
+  margin: 0;
+}
+
+.reader-sidebar__item a {
+  display: block;
+  padding: 0.55rem 1.25rem;
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: background 0.15s, border-color 0.15s;
+}
+.reader-sidebar__item a:hover { background: var(--parchment-2); }
+
+.reader-sidebar__item--active a {
+  border-left-color: var(--vermillion);
+  background: var(--parchment-2);
+}
+
+.reader-sidebar__num {
+  font-family: var(--font-cormorant), serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  color: var(--vermillion);
+  text-transform: uppercase;
+  display: block;
+}
+
+.reader-sidebar__name {
+  font-family: 'STSong', 'SimSun', 'Songti SC', serif;
+  font-size: 0.68rem;
+  color: var(--muted);
+  line-height: 1.5;
+  display: block;
+  margin-top: 0.15rem;
+  /* two-line wrap for long titles */
+  word-break: break-all;
+}
+
+/* ── Main reading pane ────────────────────────────── */
+.reader-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.reader-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0.65rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--parchment) 92%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.reader-topbar__title {
+  font-family: var(--font-cormorant), serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+/* ── Mobile chapter strip ─────────────────────────── */
+.chapter-strip {
+  display: none;
+  overflow-x: auto;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--border);
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.chapter-strip::-webkit-scrollbar { display: none; }
+
+.chapter-strip__item {
+  flex-shrink: 0;
+  font-family: var(--font-cormorant), serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  padding: 0.2rem 0.55rem;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.chapter-strip__item:hover { color: var(--ink); }
+.chapter-strip__item--active {
+  color: var(--vermillion);
+  border-color: var(--border);
+  background: var(--parchment-2);
+}
+
+@media (max-width: 768px) {
+  .reader-sidebar { display: none; }
+  .chapter-strip  { display: flex; }
+}
+
+/* ── Home page chapter grid ───────────────────────── */
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+}
+
+.chapter-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.1rem 1.4rem;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-bottom-color: var(--border);
+  transition: background 0.15s, border-color 0.15s;
+}
+.chapter-card:nth-child(odd) {
+  border-right-color: var(--border);
+}
+.chapter-card:hover {
+  background: var(--parchment-2);
+  border-color: var(--border);
+}
+
+.chapter-card__num {
+  font-family: var(--font-cormorant), serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: var(--vermillion);
+  text-transform: uppercase;
+}
+
+.chapter-card__title {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+@media (max-width: 560px) {
+  .chapter-grid { grid-template-columns: 1fr; }
+  .chapter-card:nth-child(odd) { border-right-color: transparent; }
+}
+
+/* ── Paragraph break inside the reading area ──────── */
+.para-break {
+  width: 100%;
+  height: 1.1em;
 }

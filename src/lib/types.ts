@@ -1,12 +1,8 @@
-export interface Character {
-  char: string;
-  pinyin: string | null;
-  definitions?: string[] | null;
-}
-
 export interface Sentence {
   id: string;
-  characters: Character[];
+  para?: boolean;  // true → first sentence of a new paragraph
+  text: string;
+  pinyin: (string | null)[];
 }
 
 export interface Chapter {
