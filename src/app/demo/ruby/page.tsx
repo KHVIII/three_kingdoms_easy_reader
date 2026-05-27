@@ -29,20 +29,18 @@ export default function RubyPage() {
 
         <div className="reading-area chinese" style={{ fontSize: "2rem", justifyContent: "center" }}>
           {chapter.sentences.map((sentence) =>
-            sentence.characters.map((c, i) => (
-              <span
-                key={`${sentence.id}-${i}`}
-                className={`char-ruby ${!c.pinyin ? "is-punct" : ""}`}
-              >
-                <span
-                  className="char-pinyin"
-                  style={{ visibility: showPinyin && !!c.pinyin ? "visible" : "hidden" }}
-                >
-                  {c.pinyin ?? ""}
+            [...sentence.text].map((char, i) => {
+              const py = sentence.pinyin[i];
+              const isPunct = !py;
+              return (
+                <span key={`${sentence.id}-${i}`} className={`char-ruby ${isPunct ? "is-punct" : ""}`}>
+                  <span className="char-pinyin" style={{ visibility: showPinyin && !isPunct ? "visible" : "hidden" }}>
+                    {py ?? ""}
+                  </span>
+                  <span className="char-glyph">{char}</span>
                 </span>
-                <span className="char-glyph">{c.char}</span>
-              </span>
-            ))
+              );
+            })
           )}
         </div>
       </div>

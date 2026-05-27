@@ -30,10 +30,11 @@ export default function RevealPage() {
 
         <div className="reading-area chinese" style={{ fontSize: "2rem", justifyContent: "center" }}>
           {chapter.sentences.map((sentence) =>
-            sentence.characters.map((c, i) => {
+            [...sentence.text].map((char, i) => {
               const key = `${sentence.id}-${i}`;
+              const py = sentence.pinyin[i];
+              const isPunct = !py;
               const isRevealed = revealed.has(key);
-              const isPunct = !c.pinyin;
 
               return (
                 <span
@@ -50,7 +51,7 @@ export default function RevealPage() {
                       transition: "opacity 0.18s, transform 0.18s",
                     }}
                   >
-                    {c.pinyin ?? ""}
+                    {py ?? ""}
                   </span>
                   <span
                     className="char-glyph"
@@ -59,7 +60,7 @@ export default function RevealPage() {
                       transition: "color 0.18s",
                     }}
                   >
-                    {c.char}
+                    {char}
                   </span>
                 </span>
               );
