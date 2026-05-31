@@ -97,8 +97,20 @@ export default function ReaderClient({ chapter, currentNum, chapterList }: Props
         {/* Chapter header */}
         <div style={{ maxWidth: "80%", margin: "0 auto", padding: "0 1.5rem 6rem" }}>
           <div className="chapter-header">
-            <p className="chapter-number">第{toZhNum(currentNum)}回</p>
-            <p className="chapter-title">{chapter.title}</p>
+            <div className="chapter-header__nav">
+              {currentNum > 1
+                ? <Link href={`/reader/${currentNum - 1}`} className="chapter-nav__arrow chapter-nav__arrow--prev">➵</Link>
+                : <span className="chapter-nav__arrow chapter-nav__arrow--prev chapter-nav__arrow--ghost">➵</span>
+              }
+              <div>
+                <p className="chapter-number">第{toZhNum(currentNum)}回</p>
+                <p className="chapter-title">{chapter.title}</p>
+              </div>
+              {currentNum < chapterList.length
+                ? <Link href={`/reader/${currentNum + 1}`} className="chapter-nav__arrow">➵</Link>
+                : <span className="chapter-nav__arrow chapter-nav__arrow--ghost">➵</span>
+              }
+            </div>
           </div>
 
           {/* Reading area */}

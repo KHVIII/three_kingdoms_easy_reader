@@ -466,6 +466,28 @@ ol.popup-definitions {
   backdrop-filter: blur(8px);
 }
 
+.chapter-header__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3.5rem;
+}
+
+.chapter-nav__arrow {
+  font-size: 1.9rem;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s;
+  line-height: 1;
+  display: inline-block;
+}
+.chapter-nav__arrow:hover { color: var(--vermillion); }
+.chapter-nav__arrow--prev { transform: scaleX(-1); }
+.chapter-nav__arrow--ghost {
+  opacity: 0.2;
+  pointer-events: none;
+}
+
 .reader-topbar__title {
   font-family: var(--font-cormorant), serif;
   font-style: italic;

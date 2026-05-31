@@ -170,6 +170,8 @@ function wikitextToPlain(wikitext) {
       block
         // Remove templates
         .replace(/\{\{[^}]*\}\}/g, "")
+        // Remove interlanguage links ([[en:...]], [[vi:...]], etc.)
+        .replace(/\[\[[a-z][a-z-]*:[^\]]*\]\]/g, "")
         // Unwrap wiki links
         .replace(/\[\[(?:[^\]|]*\|)?([^\]]*)\]\]/g, "$1")
         // Remove HTML tags
