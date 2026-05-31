@@ -319,6 +319,7 @@ ol.popup-definitions {
   height: 100dvh;
   overflow-y: auto;
   overflow-x: hidden;
+  overscroll-behavior: contain;
   border-right: 1px solid var(--border);
   background: var(--parchment);
   scrollbar-width: none;
@@ -332,15 +333,39 @@ ol.popup-definitions {
 
 .reader-sidebar__header {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding: 1.4rem 1.25rem 1.2rem;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 1.2rem 1.25rem;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--parchment);
+  border-bottom: 1px solid var(--border);
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.15s;
+  /* reset button styles */
+  border-left: none;
+  border-right: none;
+  border-top: none;
 }
+.reader-sidebar__header:hover { background: var(--parchment-2); }
 
 .reader-sidebar--collapsed .reader-sidebar__header {
   justify-content: center;
-  padding: 1.4rem 0 1.2rem;
+  padding: 1.2rem 0;
 }
+
+.reader-sidebar__footer {
+  position: sticky;
+  bottom: 0;
+  display: block;
+  padding: 0.9rem 1.25rem;
+  border-top: 1px solid var(--border);
+  background: var(--parchment);
+  transition: background 0.15s;
+}
+.reader-sidebar__footer:hover { background: var(--parchment-2); }
 
 .reader-sidebar__home {
   font-family: var(--font-cormorant), serif;
@@ -358,15 +383,8 @@ ol.popup-definitions {
   font-family: var(--font-cormorant), serif;
   font-size: 1.3rem;
   color: var(--muted);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
   line-height: 1;
-  flex-shrink: 0;
-  transition: color 0.15s;
 }
-.reader-sidebar__toggle:hover { color: var(--ink); }
 
 .reader-sidebar__brand {
   font-family: 'STSong', 'SimSun', 'Songti SC', serif;
@@ -430,7 +448,9 @@ ol.popup-definitions {
 .reader-main {
   display: flex;
   flex-direction: column;
-  min-height: 100dvh;
+  height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .reader-topbar {

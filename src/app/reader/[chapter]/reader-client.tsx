@@ -19,6 +19,11 @@ export default function ReaderClient({ chapter, currentNum, chapterList }: Props
   const [popup, setPopup] = useState<{ char: string; py: string } | null>(null);
 
   useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
+  useEffect(() => {
     if (!popup) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setPopup(null); };
     window.addEventListener("keydown", onKey);
