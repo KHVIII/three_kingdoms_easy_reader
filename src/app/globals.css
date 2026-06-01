@@ -335,7 +335,8 @@ ol.popup-definitions {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 1.2rem 1.25rem;
+  height: 3.2rem;
+  padding: 0 1.25rem;
   position: sticky;
   top: 0;
   z-index: 1;
@@ -353,7 +354,7 @@ ol.popup-definitions {
 
 .reader-sidebar--collapsed .reader-sidebar__header {
   justify-content: center;
-  padding: 1.2rem 0;
+  padding: 0;
 }
 
 .reader-sidebar__footer {
@@ -449,18 +450,22 @@ ol.popup-definitions {
   display: flex;
   flex-direction: column;
   height: 100dvh;
+  padding-top: 3.2rem; /* space for fixed topbar */
   overflow-y: auto;
   overscroll-behavior: contain;
 }
 
 .reader-topbar {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 10;
+  left: 40px; /* collapsed sidebar width */
+  right: 0;
+  z-index: 15;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: 0.65rem 1.5rem;
+  height: 3.2rem;
+  padding: 0 1.5rem;
   border-bottom: 1px solid var(--border);
   background: color-mix(in srgb, var(--parchment) 92%, transparent);
   backdrop-filter: blur(8px);
@@ -528,9 +533,28 @@ ol.popup-definitions {
   background: var(--parchment-2);
 }
 
+/* ── Reader content wrapper & reading area ────────── */
+.reader-content {
+  max-width: 80%;
+  margin: 0 auto;
+  padding: 0 1.5rem 6rem;
+}
+
+.reading-area--reader {
+  font-size: 1.9rem;
+  justify-content: center;
+}
+
 @media (max-width: 768px) {
-  .reader-sidebar { display: none; }
-  .chapter-strip  { display: flex; }
+  /* Chapter strip hidden — nav arrows already handle prev/next */
+  .chapter-strip  { display: none; }
+  .reader-content { max-width: 95%; padding: 0 1rem 5%; }
+  .reading-area--reader { font-size: 1.3rem; }
+  .chapter-header { padding: 5% 0 3%; }
+  .chapter-nav__arrow { font-size: 1.4rem; }
+  .chapter-header__nav { gap: 2rem; }
+  /* Collapsed sidebar on mobile: shrink to just the toggle button */
+  .reader-sidebar--collapsed { height: auto; }
 }
 
 /* ── Home page chapter grid ───────────────────────── */

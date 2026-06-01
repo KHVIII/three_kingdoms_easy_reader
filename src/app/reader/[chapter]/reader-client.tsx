@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import type { Chapter } from "@/lib/types";
 import ChapterSidebar from "@/components/chapter-sidebar";
@@ -17,6 +17,7 @@ export default function ReaderClient({ chapter, currentNum, chapterList }: Props
   const [showPinyin, setShowPinyin] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [popup, setPopup] = useState<{ char: string; py: string } | null>(null);
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -29,6 +30,17 @@ export default function ReaderClient({ chapter, currentNum, chapterList }: Props
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [popup]);
+
+  useEffect(() => {
+    if (!sidebarOpen) return;
+    const onMouseDown = (e: MouseEvent) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(e.target as Node)) {
+        setSidebarOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onMouseDown);
+    return () => document.removeEventListener("mousedown", onMouseDown);
+  }, [sidebarOpen]);
 
   // Group each hanzi with its immediately following punctuation into one flex token.
   // This prevents punctuation from wrapping to the start of a new line (行首禁則).
@@ -60,13 +72,15 @@ export default function ReaderClient({ chapter, currentNum, chapterList }: Props
     <>
     <div className="reader-layout">
 
-      {/* ── Desktop sidebar ─────────────────────────────── */}
-      <ChapterSidebar
-        chapterList={chapterList}
-        currentNum={currentNum}
-        open={sidebarOpen}
-        onToggle={() => setSidebarOpen((v) => !v)}
-      />
+      {/* ── Sidebar ──────────────────────────────────────── */}
+      <div ref={sidebarRef}>
+        <ChapterSidebar
+          chapterList={chapterList}
+          currentNum={currentNum}
+          open={sidebarOpen}
+          onToggle={() => setSidebarOpen((v) => !v)}
+        />
+      </div>
 
       {/* ── Main pane ───────────────────────────────────── */}
       <div className="reader-main">
@@ -95,7 +109,7 @@ export default function ReaderClient({ chapter, currentNum, chapterList }: Props
         </nav>
 
         {/* Chapter header */}
-        <div style={{ maxWidth: "80%", margin: "0 auto", padding: "0 1.5rem 6rem" }}>
+        <div className="reader-content">
           <div className="chapter-header">
             <div className="chapter-header__nav">
               {currentNum > 1
@@ -114,10 +128,7 @@ export default function ReaderClient({ chapter, currentNum, chapterList }: Props
           </div>
 
           {/* Reading area */}
-          <div
-            className="reading-area chinese"
-            style={{ fontSize: "1.9rem", justifyContent: "center" }}
-          >
+          <div className="reading-area reading-area--reader chinese">
             {chapter.sentences.flatMap((sentence) => {
               const tokens = tokenize(sentence.text, sentence.pinyin);
               const spans = tokens.map((tok, i) => {

@@ -25,7 +25,7 @@ export default function ChapterSidebar({ chapterList, currentNum, open, onToggle
         onClick={onToggle}
         aria-label={open ? "收起目录" : "展开目录"}
       >
-        <span className="reader-sidebar__toggle">{open ? "‹" : "›"}</span>
+        <span className="reader-sidebar__toggle">{open ? "‹" : "☰"}</span>
       </button>
       {open && (
         <>
