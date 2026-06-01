@@ -179,6 +179,41 @@ export default function ReaderClient({ chapter, currentNum, chapterList }: Props
               return spans;
             })}
           </div>
+
+          {/* Bottom chapter navigation */}
+          {(() => {
+            const prev = chapterList.find(ch => ch.number === currentNum - 1);
+            const next = chapterList.find(ch => ch.number === currentNum + 1);
+            return (
+              <div className="chapter-nav-bottom">
+                <div className="chapter-nav-bottom__side chapter-nav-bottom__side--prev">
+                  {prev ? (
+                    <Link href={`/reader/${prev.number}`} className="chapter-nav-bottom__link">
+                      <span className="chapter-nav-bottom__row">
+                        <span className="chapter-nav__arrow chapter-nav__arrow--prev chapter-nav-bottom__arrow">➵</span>
+                        <span className="chapter-nav-bottom__label">上一回</span>
+                      </span>
+                      <span className="chapter-nav-bottom__num">第{toZhNum(prev.number)}回</span>
+                      <span className="chapter-nav-bottom__title">{prev.title}</span>
+                    </Link>
+                  ) : <span />}
+                </div>
+                <div className="chapter-nav-bottom__divider" aria-hidden="true" />
+                <div className="chapter-nav-bottom__side chapter-nav-bottom__side--next">
+                  {next ? (
+                    <Link href={`/reader/${next.number}`} className="chapter-nav-bottom__link">
+                      <span className="chapter-nav-bottom__row">
+                        <span className="chapter-nav-bottom__label">下一回</span>
+                        <span className="chapter-nav__arrow chapter-nav-bottom__arrow">➵</span>
+                      </span>
+                      <span className="chapter-nav-bottom__num">第{toZhNum(next.number)}回</span>
+                      <span className="chapter-nav-bottom__title">{next.title}</span>
+                    </Link>
+                  ) : <span />}
+                </div>
+              </div>
+            );
+          })()}
         </div>
       </div>
     </div>

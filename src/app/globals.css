@@ -601,6 +601,90 @@ ol.popup-definitions {
   .chapter-card:nth-child(odd) { border-right-color: transparent; }
 }
 
+/* ── Bottom chapter navigation ───────────────────── */
+.chapter-nav-bottom {
+  display: flex;
+  gap: 1rem;
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.chapter-nav-bottom__side {
+  flex: 1;
+}
+
+.chapter-nav-bottom__divider {
+  width: 2px;
+  background: var(--border);
+  margin: 0.5rem 0;
+  flex-shrink: 0;
+}
+
+.chapter-nav-bottom__side--next {
+  text-align: right;
+}
+
+.chapter-nav-bottom__side--next .chapter-nav-bottom__link {
+  align-items: flex-end;
+}
+
+.chapter-nav-bottom__side--next .chapter-nav-bottom__row {
+  flex-direction: row-reverse;
+}
+
+.chapter-nav-bottom__link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  text-decoration: none;
+  padding: 1rem 1.25rem;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  transition: background 0.15s, border-color 0.15s;
+}
+.chapter-nav-bottom__link:hover {
+  background: var(--parchment-2);
+  border-color: var(--border);
+}
+
+.chapter-nav-bottom__label {
+  font-family: var(--font-cormorant), serif;
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.chapter-nav-bottom__row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.chapter-nav-bottom__arrow {
+  font-size: 1.1rem;
+}
+
+.chapter-nav-bottom__num {
+  font-family: var(--font-cormorant), serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  color: var(--vermillion);
+}
+
+.chapter-nav-bottom__title {
+  font-family: 'STSong', 'SimSun', 'Songti SC', serif;
+  font-size: 0.9rem;
+  color: var(--ink);
+  line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  .chapter-nav-bottom { flex-direction: column; gap: 0; }
+  .chapter-nav-bottom__side--next { text-align: left; }
+  .chapter-nav-bottom__divider { width: 15%; height: 1px; margin: 0 auto; }
+}
+
 /* ── Paragraph break inside the reading area ──────── */
 .para-break {
   width: 100%;
