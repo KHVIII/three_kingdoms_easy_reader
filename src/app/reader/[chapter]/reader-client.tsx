@@ -6,6 +6,7 @@ import type { Chapter } from "@/lib/types";
 import ChapterSidebar from "@/components/chapter-sidebar";
 import type { ChapterMeta } from "@/components/chapter-sidebar";
 import { toZhNum } from "@/lib/zh-num";
+import GearIcon from "@/components/GearIcon";
 
 interface Props {
   chapter: Chapter;
@@ -22,10 +23,35 @@ export default function ReaderClient({ chapter, currentNum, chapterList }: Props
   const [clickPopup, setClickPopup] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+  const [readChapters, setReadChapters] = useState<Set<number>>(new Set());
+  const [progressModalOpen, setProgressModalOpen] = useState(false);
+  const [progressInput, setProgressInput] = useState("1");
+  const [resetConfirmOpen, setResetConfirmOpen] = useState(false);
 
   // Persist settings in localStorage (client-only, works on static pages)
   const saveFontSize = (v: number) => { setFontSize(v); localStorage.setItem("tk_fontSize", String(v)); };
   const saveClickPopup = (v: boolean) => { setClickPopup(v); localStorage.setItem("tk_clickPopup", String(v)); };
+
+  const markRead = () => {
+    const next = new Set(readChapters);
+    next.add(currentNum);
+    setReadChapters(next);
+    localStorage.setItem("tk_read", JSON.stringify([...next]));
+  };
+
+  const resetRead = () => {
+    setReadChapters(new Set());
+    localStorage.removeItem("tk_read");
+  };
+
+  const applyProgress = () => {
+    const parsed = parseInt(progressInput, 10);
+    const clamped = Math.max(1, Math.min(120, isNaN(parsed) ? 1 : parsed));
+    const next = new Set(Array.from({ length: clamped - 1 }, (_, i) => i + 1));
+    setReadChapters(next);
+    localStorage.setItem("tk_read", JSON.stringify([...next]));
+    setProgressModalOpen(false);
+  };
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -41,6 +67,8 @@ export default function ReaderClient({ chapter, currentNum, chapterList }: Props
     if (storedClick !== null) setClickPopup(storedClick === "true");
     const storedPinyin = localStorage.getItem("tk_showPinyin");
     if (storedPinyin !== null) setShowPinyin(storedPinyin === "true");
+    const storedRead = localStorage.getItem("tk_read");
+    if (storedRead) setReadChapters(new Set(JSON.parse(storedRead) as number[]));
     setHydrated(true);
   }, []);
 
@@ -118,6 +146,7 @@ export default function ReaderClient({ chapter, currentNum, chapterList }: Props
           currentNum={currentNum}
           open={sidebarOpen}
           onToggle={() => setSidebarOpen((v) => !v)}
+          readChapters={readChapters}
         />
       </div>
 
@@ -128,11 +157,11 @@ export default function ReaderClient({ chapter, currentNum, chapterList }: Props
         <header className="reader-topbar">
           <div className="reader-topbar__actions">
             <button
-              className="pinyin-toggle"
+              className="pinyin-toggle pinyin-toggle--icon"
               onClick={() => setSettingsOpen(true)}
               aria-label="设置"
             >
-              设置
+              <GearIcon />
             </button>
             <button
               className={`pinyin-toggle ${showPinyin ? "active" : ""}`}
@@ -250,7 +279,7 @@ export default function ReaderClient({ chapter, currentNum, chapterList }: Props
                 <div className="chapter-nav-bottom__divider" aria-hidden="true" />
                 <div className="chapter-nav-bottom__side chapter-nav-bottom__side--next">
                   {next ? (
-                    <Link href={`/reader/${next.number}`} className="chapter-nav-bottom__link">
+                    <Link href={`/reader/${next.number}`} className="chapter-nav-bottom__link" onClick={markRead}>
                       <span className="chapter-nav-bottom__row">
                         <span className="chapter-nav-bottom__label">下一回</span>
                         <span className="chapter-nav__arrow chapter-nav-bottom__arrow">➵</span>
@@ -313,6 +342,81 @@ export default function ReaderClient({ chapter, currentNum, chapterList }: Props
             >
               <span className="settings-toggle__knob" />
             </button>
+          </div>
+
+          <div className="settings-subsection">
+            <p className="settings-subsection__title">已读设置</p>
+            <p className="settings-subsection__status">
+              {readChapters.size > 0 ? (
+                <>
+                  《 目前读至第&nbsp;
+                  <span className="settings-subsection__status-num">{Math.max(...readChapters) + 1}</span>
+                  &nbsp;回 》
+                </>
+              ) : "暂无已读记录"}
+            </p>
+            <div className="settings-subsection__buttons">
+              <button
+                className="settings-action-btn"
+                data-tip="清除所有章节的已读记录"
+                onClick={() => setResetConfirmOpen(true)}
+              >重置已读</button>
+              <button
+                className="settings-action-btn"
+                data-tip="将指定回之前的章节全部标为已读"
+                onClick={() => {
+                  const latest = readChapters.size > 0 ? Math.max(...readChapters) + 1 : 1;
+                  setProgressInput(String(latest));
+                  setProgressModalOpen(true);
+                }}
+              >设置已读进度</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* ── Reset confirmation modal ─────────────────────── */}
+    {resetConfirmOpen && (
+      <div className="settings-overlay" onClick={() => setResetConfirmOpen(false)}>
+        <div className="settings-modal" onClick={(e) => e.stopPropagation()}>
+          <button className="popup-close" onClick={() => setResetConfirmOpen(false)}>✕</button>
+          <p className="settings-title">重置已读</p>
+          <p className="settings-progress-desc">确定清除所有已读记录？此操作无法撤销。</p>
+          <div className="settings-progress-actions">
+            <button className="settings-action-btn" onClick={() => setResetConfirmOpen(false)}>取消</button>
+            <button className="settings-action-btn settings-action-btn--primary" onClick={() => { resetRead(); setResetConfirmOpen(false); }}>确认重置</button>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* ── Read progress modal ──────────────────────────── */}
+    {progressModalOpen && (
+      <div className="settings-overlay" onClick={() => setProgressModalOpen(false)}>
+        <div className="settings-modal" onClick={(e) => e.stopPropagation()}>
+          <button className="popup-close" onClick={() => setProgressModalOpen(false)}>✕</button>
+          <p className="settings-title">设置已读进度</p>
+          <p className="settings-progress-desc">选定回之前的所有章节将标为已读</p>
+          <div className="settings-progress-input-wrap">
+            <span className="settings-label">已读至第</span>
+            <input
+              type="number"
+              min={1} max={120}
+              value={progressInput}
+              onChange={(e) => {
+                const raw = e.target.value;
+                if (raw === "") { setProgressInput(""); return; }
+                const n = parseInt(raw, 10);
+                if (!isNaN(n)) setProgressInput(String(Math.min(120, n)));
+              }}
+              className="settings-progress-input"
+            />
+            <span className="settings-label">回</span>
+          </div>
+          <div className="settings-progress-actions">
+            <button className="settings-action-btn" onClick={() => setProgressModalOpen(false)}>取消</button>
+            <button className="settings-action-btn settings-action-btn--primary" onClick={applyProgress}>保存</button>
           </div>
         </div>
       </div>

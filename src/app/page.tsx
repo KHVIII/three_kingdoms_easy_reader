@@ -1,6 +1,5 @@
-import Link from "next/link";
 import { CHAPTER_METADATA } from "@/lib/content";
-import { toZhNum } from "@/lib/zh-num";
+import HomeChapterGrid from "@/components/HomeChapterGrid";
 
 export default function Home() {
   return (
@@ -22,31 +21,8 @@ export default function Home() {
         </p>
       </div>
 
-      {/* ── Divider ── */}
-      <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "3rem" }}>
-        <div style={{ flex: 1, height: "1px", background: "var(--border)" }} />
-        <span
-          style={{
-            fontFamily: "var(--font-cormorant), serif",
-            fontSize: "0.72rem",
-            letterSpacing: "0.22em",
-            color: "var(--muted)",
-          }}
-        >
-          目录
-        </span>
-        <div style={{ flex: 1, height: "1px", background: "var(--border)" }} />
-      </div>
-
-      {/* ── Chapter grid ── */}
-      <div className="chapter-grid">
-        {CHAPTER_METADATA.map((meta) => (
-          <Link key={meta.number} href={`/reader/${meta.number}`} className="chapter-card">
-            <span className="chapter-card__num">第{toZhNum(meta.number)}回</span>
-            <span className="chapter-card__title chinese">{meta.title}</span>
-          </Link>
-        ))}
-      </div>
+      {/* ── Chapter grid + CTA + Settings ── */}
+      <HomeChapterGrid chapters={CHAPTER_METADATA} />
     </main>
   );
 }

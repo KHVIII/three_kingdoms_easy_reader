@@ -10,6 +10,7 @@ interface Props {
   currentNum?: number;
   open: boolean;
   onToggle: () => void;
+  readChapters?: Set<number>;
 }
 
 function shortTitle(title: string) {
@@ -17,7 +18,7 @@ function shortTitle(title: string) {
   return space > 0 ? title.slice(0, space) : title;
 }
 
-export default function ChapterSidebar({ chapterList, currentNum, open, onToggle }: Props) {
+export default function ChapterSidebar({ chapterList, currentNum, open, onToggle, readChapters }: Props) {
   return (
     <aside className={`reader-sidebar${open ? "" : " reader-sidebar--collapsed"}`}>
       <button
@@ -34,11 +35,14 @@ export default function ChapterSidebar({ chapterList, currentNum, open, onToggle
               {chapterList.map((meta) => (
                 <li
                   key={meta.number}
-                  className={`reader-sidebar__item${meta.number === currentNum ? " reader-sidebar__item--active" : ""}`}
+                  className={`reader-sidebar__item${meta.number === currentNum ? " reader-sidebar__item--active" : ""}${readChapters?.has(meta.number) ? " reader-sidebar__item--read" : ""}`}
                 >
                   <Link href={`/reader/${meta.number}`}>
                     <span className="reader-sidebar__num">第{toZhNum(meta.number)}回</span>
                     <span className="reader-sidebar__name">{shortTitle(meta.title)}</span>
+                    {readChapters?.has(meta.number) && (
+                      <span className="reader-sidebar__read-badge">已读</span>
+                    )}
                   </Link>
                 </li>
               ))}
